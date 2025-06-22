@@ -1,0 +1,101 @@
+package redactedrice.universalrandomizer.randomize;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.junit.jupiter.api.Test;
+
+import redactedrice.universalrandomizer.pool.EliminatePool;
+import redactedrice.universalrandomizer.userobjectapis.MultiSetter;
+import redactedrice.universalrandomizer.userobjectapis.MultiSetterNoReturn;
+import support.SimpleObject;
+
+// Tests the Randomizer Reuse class and by extension the Randomizer class since the
+// reuse class is the most simple of the classes
+class SingleAsMultiTest {
+
+	final List<Integer> NON_DUPLICATE_VALS = List.of(1, -4, 5, 99);
+	final List<Integer> DUPLICATE_VALS = List.of(1, -4, 5, 1, 99, 1, 5);
+	final Integer NON_EXISTING_VAL = 7;
+	
+	@Test
+	void asMultiRandomizer() 
+	{
+		final int LIST_SIZE = 5;
+		
+		// Use mock randomizer to force the excluded value to be selected
+		Random rand = mock(Random.class);
+		when(rand.nextInt(anyInt())).thenReturn(0);
+		
+		// Set expectations
+		Map<Integer, List<String>> valsMap = new HashMap<>();
+		List<SimpleObject> list = new LinkedList<>();
+		for (int i = 0; i < LIST_SIZE; i++)
+		{
+			valsMap.put(i, List.of("" + i, "" + (i + LIST_SIZE)));
+			if (i < LIST_SIZE)
+			{
+				list.add(new SimpleObject("test" + i, i));
+			}
+		}
+		
+		EliminatePool<List<String>> pool = EliminatePool.create(valsMap.values());
+		MultiSetter<SimpleObject, String> setMapEntryButNotVal5 = (so, val, cnt) -> {
+			if (val.equals("5"))
+			{
+				return false;
+			}
+			so.setMapEntry(val, cnt);
+			return true;
+		};
+		MultiSetter<SimpleObject, List<String>> wrapper = (so, vals, cnt) -> {
+			int count = 0;
+			for (String val : vals) {
+				if (!setMapEntryButNotVal5.setReturn(so, val, count++)) {
+					return false;
+				}
+			}
+			return true;
+		};
+		SingleRandomizer<SimpleObject, List<String>> test = SingleRandomizer.create(
+				wrapper);
+
+		// Perform test and check results
+		assertFalse(test.perform(list.stream(), pool, rand));
+		pool.reset();
+
+		MultiSetterNoReturn<SimpleObject, String> setMapEntry = SimpleObject::setMapEntry;
+		MultiSetter<SimpleObject, List<String>> wrapper2 = (so, vals, cnt) -> {
+			int count = 0;
+			for (String val : vals) {
+				if (!setMapEntry.asMultiSetter().setReturn(so, val, count++)) {
+					return false;
+				}
+			}
+			return true;
+		};
+		test = SingleRandomizer.create(wrapper2);
+		assertTrue(test.perform(list.stream(), pool, rand));
+		for (SimpleObject so : list)
+		{
+			assertEquals(2, so.getMap().size());
+			int key = Integer.parseInt(so.getMap().get(0));
+			List<String> expectedVals = valsMap.remove(key);
+			assertNotNull(expectedVals, "Failed to find key for so in expected vals: " + key);
+			assertEquals(expectedVals.get(0), so.getMap().get(0), so.getMap().get(1) + " value 1 not found in set");
+			assertEquals(expectedVals.get(1), so.getMap().get(1), so.getMap().get(2) + " value 2 not found in set");
+		}
+		assertTrue(valsMap.isEmpty());
+	}
+}
