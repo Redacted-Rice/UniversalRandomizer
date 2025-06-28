@@ -26,7 +26,6 @@ import redactedrice.universalrandomizer.pool.EliminatePoolSet;
 import redactedrice.universalrandomizer.pool.MultiPool;
 import redactedrice.universalrandomizer.pool.RandomizerPool;
 import redactedrice.universalrandomizer.pool.ReusePool;
-import redactedrice.universalrandomizer.randomize.SingleRandomizer;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.userobjectapis.MultiGetter;
 import redactedrice.universalrandomizer.userobjectapis.Setter;
@@ -86,7 +85,7 @@ class RandomizerTests {
 
 		// Create test data and object
 		List<SimpleObject> list = createSimpleObjects(LIST_SIZE);
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
 
 		// Perform test and check results
 		assertTrue(test.perform(list.stream(), pool, rand));
@@ -108,7 +107,7 @@ class RandomizerTests {
 		// Create test data and object
 		EliminatePool<Integer> basePool = EliminatePool.create(expected);
 		List<SimpleObject> list = createSimpleObjects(LIST_SIZE);
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
 
 		// Basic pool with no randomizer passed
 		assertTrue(test.perform(list.stream(), basePool));
@@ -150,7 +149,7 @@ class RandomizerTests {
 		
 		// Create test data and object
 		List<SimpleObject> list = createSimpleObjects(LIST_SIZE);
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
 
 		// Perform test and check results
 		assertFalse(test.perform(list.stream(), pool, rand));
@@ -176,7 +175,7 @@ class RandomizerTests {
 		when(pool.copy()).thenReturn(pool);
 		
 		List<SimpleObject> list = createSimpleObjects(LIST_SIZE);
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(setterInt);
 
 		// Perform test and check results
 		assertFalse(test.perform(list.stream(), pool, rand));
@@ -202,7 +201,7 @@ class RandomizerTests {
 		EliminatePoolSet<Integer> pool = EliminatePoolSet.create(
 				EliminatePool.create(TEST_VALUES), 3);
 
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(
 				SetterNoReturn.asMultiSetter(SimpleObject::setField));
 		
 		assertTrue(test.perform(objs.stream(), pool, rand));
@@ -230,7 +229,7 @@ class RandomizerTests {
 		EliminatePoolSet<Integer> pool = EliminatePoolSet.create(
 				EliminatePool.create(TEST_VALUES), 2);
 
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(
 				SetterNoReturn.asMultiSetter(SimpleObject::setField));
 		
 		assertFalse(test.perform(objs.stream(), pool, rand));
@@ -266,7 +265,7 @@ class RandomizerTests {
 		MultiGetter<SimpleObject, String> soString = (so2, cnt) -> so2.getStringField();
 		MultiPool<SimpleObject, String, Integer> pool = MultiPool.create(poolMap, soString);
 
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(
 				SetterNoReturn.asMultiSetter(SimpleObject::setField));
 		
 		assertTrue(test.perform(objs.stream(), pool, rand));
@@ -307,7 +306,7 @@ class RandomizerTests {
 		MultiGetter<SimpleObject, String> soString = (so2, cnt) -> so2.getStringField();
 		MultiPool<SimpleObject, String, Integer> pool = MultiPool.create(poolMap, soString);
 
-		SingleRandomizer<SimpleObject, Integer> test = SingleRandomizer.create(
+		Randomizer<SimpleObject, Integer> test = SingleRandomizer.create(
 				SetterNoReturn.asMultiSetter(SimpleObject::setField));
 		
 		assertFalse(test.perform(objs.stream(), pool, rand));

@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import redactedrice.universalrandomizer.randomize.SingleRandomizer;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.userobjectapis.MultiSetter;
 import redactedrice.universalrandomizer.userobjectapis.Setter;
@@ -31,7 +30,7 @@ class SingleRandomizerTests {
     	Getter<SimpleObject, Integer> count2Getter = o -> 2;
     	
     	//create(MultiSetter<T2, P2> setter, Getter<T2, Integer> countGetter, EnforceParams<T2> enforce)
-    	SingleRandomizer<SimpleObject, Integer> rr = SingleRandomizer.create(ms, count2Getter);
+    	Randomizer<SimpleObject, Integer> rr = SingleRandomizer.create(ms, count2Getter);
     	assertEquals(ms, rr.getSetter());
     	assertEquals(count2Getter, rr.getCountGetter());
     	assertEquals(2, rr.getCountGetter().get(null));

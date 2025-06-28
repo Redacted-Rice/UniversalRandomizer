@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import redactedrice.universalrandomizer.wrappers.ComparableAsComparator;
 import support.SumableComparableObject;
 
 

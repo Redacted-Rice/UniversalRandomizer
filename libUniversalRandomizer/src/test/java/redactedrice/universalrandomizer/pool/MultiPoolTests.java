@@ -12,11 +12,6 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import redactedrice.universalrandomizer.pool.EliminatePool;
-import redactedrice.universalrandomizer.pool.EliminatePoolSet;
-import redactedrice.universalrandomizer.pool.MultiPool;
-import redactedrice.universalrandomizer.pool.RandomizerPool;
-import redactedrice.universalrandomizer.pool.ReusePool;
 import redactedrice.universalrandomizer.userobjectapis.MultiGetter;
 import support.SimpleObject;
 
