@@ -10,15 +10,15 @@ import redactedrice.universalrandomizer.pool.RandomizerSinglePool;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.userobjectapis.MultiSetter;
 
-public abstract class Randomizer<T, U, O, P, S> 
+public class Randomizer<T, P> 
 {	
 	private RandomizerPool<P> pool;
-	private RandomizerMultiPool<U, P> multiPool;
+	private RandomizerMultiPool<T, P> multiPool;
 	private Random rand;
-	private MultiSetter<O, S> setter;
+	private MultiSetter<T, P> setter;
 	private Getter<T, Integer> countGetter;
 
-	protected Randomizer(MultiSetter<O, S> setter, Getter<T, Integer> countGetter)
+	protected Randomizer(MultiSetter<T, P> setter, Getter<T, Integer> countGetter)
 	{
 		pool = null;
 		multiPool = null;
@@ -33,7 +33,7 @@ public abstract class Randomizer<T, U, O, P, S>
 		return perform(objStream, pool, null);
 	}
 
-	public boolean perform(Stream<T> objStream, RandomizerMultiPool<U, P> pool) 
+	public boolean perform(Stream<T> objStream, RandomizerMultiPool<T, P> pool) 
 	{
 		return perform(objStream, pool, null);
 	}
@@ -45,7 +45,7 @@ public abstract class Randomizer<T, U, O, P, S>
 		return performCommon(objStream, rand);
 	}
 	
-	public boolean perform(Stream<T> objStream, RandomizerMultiPool<U, P> pool, Random rand) 
+	public boolean perform(Stream<T> objStream, RandomizerMultiPool<T, P> pool, Random rand) 
 	{
 		this.pool = pool;
 		this.multiPool = pool;
@@ -107,7 +107,25 @@ public abstract class Randomizer<T, U, O, P, S>
 		return success;
 	}
 
-	protected abstract boolean attemptAssignValue(T obj, int count);
+	protected boolean attemptAssignValue(T obj, int count) {
+		// Set the pool by the key
+		if (getMultiPool() != null)
+		{
+			getMultiPool().setPool(obj, count);
+		}		
+		
+		P selectedVal = getPool().get(getRandom());
+		// Loop on pool depth (if pool supports it)
+		while (selectedVal == null && getPool().useNextPool())
+		{
+			selectedVal = getPool().get(getRandom());
+		}
+		return selectedVal != null && assignAndCheckEnforce(obj, selectedVal, count);
+	}
+	
+	protected boolean assignAndCheckEnforce(T obj, P poolValue, int count) {
+		return getSetter().setReturn(obj, poolValue, count);
+	}
 
 	protected Random getRandom() 
 	{
@@ -119,17 +137,9 @@ public abstract class Randomizer<T, U, O, P, S>
 		return pool;
 	}
 
-	protected RandomizerMultiPool<U, P> getMultiPool() 
+	protected RandomizerMultiPool<T, P> getMultiPool() 
 	{
 		return multiPool;
-	}
-	
-	protected void safeMultiPoolSetPool(U obj, int count) 
-	{
-		if (multiPool != null)
-		{
-			multiPool.setPool(obj, count);
-		}
 	}
 	
 	protected Getter<T, Integer> getCountGetter() 
@@ -137,7 +147,7 @@ public abstract class Randomizer<T, U, O, P, S>
 		return countGetter;
 	}
 
-	protected MultiSetter<O, S> getSetter() 
+	protected MultiSetter<T, P> getSetter() 
 	{
 		return setter;
 	}

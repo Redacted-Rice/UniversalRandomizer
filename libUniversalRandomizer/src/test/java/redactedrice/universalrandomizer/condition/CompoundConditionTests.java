@@ -13,12 +13,6 @@ import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
-import redactedrice.universalrandomizer.condition.Comparison;
-import redactedrice.universalrandomizer.condition.CompoundCondition;
-import redactedrice.universalrandomizer.condition.Logic;
-import redactedrice.universalrandomizer.condition.LogicConditionPair;
-import redactedrice.universalrandomizer.condition.Negate;
-import redactedrice.universalrandomizer.condition.SimpleCondition;
 import redactedrice.universalrandomizer.userobjectapis.Condition;
 import support.SimpleObject;
 

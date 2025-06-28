@@ -6,9 +6,6 @@ import java.util.Comparator;
 
 import org.junit.jupiter.api.Test;
 
-import redactedrice.universalrandomizer.condition.Comparison;
-import redactedrice.universalrandomizer.condition.Negate;
-import redactedrice.universalrandomizer.condition.SimpleCondition;
 import redactedrice.universalrandomizer.userobjectapis.Condition;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import support.SimpleObject;

@@ -15,7 +15,6 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import redactedrice.universalrandomizer.pool.EliminatePool;
 
 @SuppressWarnings("serial")
 class EliminatePoolTests {

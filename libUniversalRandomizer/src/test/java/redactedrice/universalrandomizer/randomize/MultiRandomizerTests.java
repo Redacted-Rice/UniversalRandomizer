@@ -36,9 +36,9 @@ class MultiRandomizerTests {
     	MultiSetter<SimpleObject, Integer> ms = (o, v, cnt) -> { o.intField = v; return true; };
     	
     	// create(MultiSetter<T2, S2> setter, EnforceParams<T2> enforce)
-    	MultiRandomizer<SimpleObject, List<Integer>, Integer> rr = 
+    	Randomizer<SimpleObject, List<Integer>> rr = 
     			MultiRandomizer.create(ms);
-    	assertEquals(ms, rr.getSetter());
+    	assertEquals(ms, ((MultiSetterWrapper<?, ?, ?>)rr.getSetter()).getSetter());
     	assertEquals(1, rr.getCountGetter().get(null));
     	assertNull(rr.getPool());
     	assertNull(rr.getMultiPool());
@@ -83,7 +83,7 @@ class MultiRandomizerTests {
 			so.setMapEntry(val, cnt);
 			return true;
 		};
-		MultiRandomizer<SimpleObject, List<String>, String> test = MultiRandomizer.create(
+		Randomizer<SimpleObject, List<String>> test = MultiRandomizer.create(
 				setMapEntryButNotVal5);
 
 		// Perform test and check results
