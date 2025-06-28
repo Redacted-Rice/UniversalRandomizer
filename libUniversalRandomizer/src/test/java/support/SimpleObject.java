@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleObject 
+public class SimpleObject
 {
 	public UncomparableObject uncomparableObj;
 	public String stringField;
