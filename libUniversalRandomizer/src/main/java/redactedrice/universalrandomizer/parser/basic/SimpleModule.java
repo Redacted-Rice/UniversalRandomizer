@@ -1,11 +1,11 @@
-package redactedrice.universalrandomizer.parser;
+package redactedrice.universalrandomizer.parser.basic;
 
 import java.util.function.Predicate;
 
-public class SimpleHandler extends BaseHandler {
-    private final LineHandler handler;
+public class SimpleModule extends BaseModule {
+    private final HandleLambda handler;
 	
-	public SimpleHandler(String name, Predicate<String> predicate, LineHandler handler, String... reservedWords) {
+	public SimpleModule(String name, Predicate<String> predicate, HandleLambda handler, String... reservedWords) {
         super(name, predicate);
         this.handler = handler;
         

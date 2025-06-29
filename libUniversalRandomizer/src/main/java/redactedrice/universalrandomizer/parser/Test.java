@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
+import redactedrice.universalrandomizer.parser.basic.AliasModule;
+import redactedrice.universalrandomizer.parser.basic.SimpleModule;
+
 // Simple test for development to check the behavior is as expected
 public class Test {
     public static void main(String[] args) throws IOException {
@@ -16,23 +19,23 @@ public class Test {
 		parser.addSingleLineComment("#");
 		parser.addMultiLineComment("/*", "*/");
 	
-		parser.addHandler(new SimpleHandler(
+		parser.addHandler(new SimpleModule(
 		    "definitions",
 		    line -> line.trim().startsWith("def "),
 		    line -> System.out.println("DEF → " + line),
 		    "def"
 		));
 		
-		parser.addHandler(new AliasHandler(parser));
+		parser.addHandler(new AliasModule());
 		
-		parser.addHandler(new SimpleHandler(
+		parser.addHandler(new SimpleModule(
 			    "TestPrintHandler",
 			    line -> line.trim().startsWith("println "),
 			    line -> System.out.println("Print: " + line.substring(8))
 			));
 	
 		// Fallback (error)
-		parser.addHandler(new SimpleHandler(
+		parser.addHandler(new SimpleModule(
 		    "fallback",
 		    line -> true,
 		    line -> System.out.println("UNHANDLED → " + line)

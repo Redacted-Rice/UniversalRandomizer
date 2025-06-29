@@ -1,16 +1,20 @@
-package redactedrice.universalrandomizer.parser;
+package redactedrice.universalrandomizer.parser.basic;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import redactedrice.universalrandomizer.parser.Parser;
+import redactedrice.universalrandomizer.parser.ParserModule;
+
 /** A named DSL‐line handler carrying a back‐pointer to its parser. */
-public abstract class BaseHandler implements Handler {
+public abstract class BaseModule implements ParserModule {
     private final String name;
     private final Predicate<String> predicate;
     protected final Set<String> reservedWords;
+    protected Parser parser;
 
-    protected BaseHandler(String name, Predicate<String> predicate) {
+    protected BaseModule(String name, Predicate<String> predicate) {
         this.name = name;
         this.predicate = predicate;
         this.reservedWords = new HashSet<>();
@@ -32,5 +36,10 @@ public abstract class BaseHandler implements Handler {
      */
     public Set<String> getReservedWords() {
         return reservedWords;
+    }
+
+	@Override
+    public void setParser(Parser parser) {
+    	this.parser = parser;
     }
 }
