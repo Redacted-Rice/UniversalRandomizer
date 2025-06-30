@@ -18,9 +18,8 @@ public class Parser {
     private final Set<String> singleLineComment = new HashSet<>();
     private final Map<String, String> multiLineComment = new HashMap<>();
 
-    private final List<ReservedWordHandler> reservedWordHandlers = new ArrayList<>();
-    private final List<AliasHandler> aliasHandlers = new ArrayList<>();
-    private final List<VariableHandler> variableHandlers = new ArrayList<>();
+    private final List<AliasModule> aliasHandlers = new ArrayList<>();
+    private final List<VariableModule> variableHandlers = new ArrayList<>();
     private final List<ParserModule> handlers = new ArrayList<>();
     private final Map<String, ParserModule> index = new HashMap<>();
 
@@ -60,11 +59,11 @@ public class Parser {
         index.put(handler.getName(), handler);
         
         // If its an alias replacer as well, kept track of it
-        if (handler instanceof AliasHandler) {
-        	aliasHandlers.add((AliasHandler)handler);
+        if (handler instanceof AliasModule) {
+        	aliasHandlers.add((AliasModule)handler);
         }
-        if (handler instanceof VariableHandler) {
-        	variableHandlers.add((VariableHandler)handler);
+        if (handler instanceof VariableModule) {
+        	variableHandlers.add((VariableModule)handler);
         }
     }
 
@@ -176,7 +175,7 @@ public class Parser {
 
     private void dispatch(String logicalLine) {
       // Apply any alias‐substitutions
-      for (AliasHandler aliaser : aliasHandlers) {
+      for (AliasModule aliaser : aliasHandlers) {
           logicalLine = aliaser.replaceAliases(logicalLine);
       }
       
@@ -187,7 +186,7 @@ public class Parser {
           return;
         }
       }
-      throw new IllegalStateException("No handler for:\n" + logicalLine);
+	  System.err.println("UNHANDLED → " + logicalLine);
     }
     
     // ------------- Public Fns for Modules ------------
@@ -198,8 +197,8 @@ public class Parser {
     }
     
     public boolean isAliasDefined(String alias) {
-        for (AliasHandler aliasHandler : aliasHandlers) {
-            if (aliasHandler.contains(alias)) {
+        for (AliasModule aliasHandler : aliasHandlers) {
+            if (aliasHandler.isAlias(alias)) {
             	return true;
             }
         }
@@ -207,8 +206,8 @@ public class Parser {
     }
     
     public boolean isVariableDefined(String var) {
-        for (VariableHandler variableHandler : variableHandlers) {
-            if (variableHandler.contains(var)) {
+        for (VariableModule variableHandler : variableHandlers) {
+            if (variableHandler.isVariable(var)) {
             	return true;
             }
         }
@@ -224,15 +223,12 @@ public class Parser {
         for (ParserModule h : handlers) {
             all.addAll(h.getReservedWords());
         }
-        for (ReservedWordHandler handler : reservedWordHandlers) {
-        	all.addAll(handler.getReservedWords());
-        }
         return all;
     }
     
     public Set<String> getAllAliases() {
         Set<String> all = new HashSet<>();
-        for (AliasHandler aliaser : aliasHandlers) {
+        for (AliasModule aliaser : aliasHandlers) {
             all.addAll(aliaser.getReservedWords());
         }
         return all;
@@ -240,7 +236,7 @@ public class Parser {
     
     public Set<String> getAllVariables() {
         Set<String> all = new HashSet<>();
-        for (VariableHandler varHandler : variableHandlers) {
+        for (VariableModule varHandler : variableHandlers) {
             all.addAll(varHandler.getReservedWords());
         }
         return all;
@@ -250,7 +246,7 @@ public class Parser {
         return index.get(name);
     }
     
-    public List<AliasHandler> getAliasHandlers(String name) {
+    public List<AliasModule> getAliasHandlers(String name) {
         return aliasHandlers;
     }
 }

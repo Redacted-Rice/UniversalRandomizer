@@ -5,19 +5,20 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class VariableModule extends BaseModule {
+import redactedrice.universalrandomizer.parser.VariableModule;
+
+public class BasicVariableModule extends LineStartMatchModule implements VariableModule {
 	private final static Pattern varDef = Pattern.compile("^\\s*variable\\s+(\\w+)\\s*=\\s*(.+)$");
 	
 	private final Map<String, Object> variables = new LinkedHashMap<>();
 	
-	protected VariableModule() {
-		super("BasicVariableHandler", line -> varDef.matcher(line).matches());
-		reservedWords.add("variable");
+	protected BasicVariableModule() {
+		super("BasicVariableHandler", "variable");
 	}
 	
 	/** Retrieve all defined variables (immutable view). */
 	public Map<String,Object> getVariables() {
-	return Collections.unmodifiableMap(variables);
+		return Collections.unmodifiableMap(variables);
 	}
 	
 	@Override
@@ -37,11 +38,29 @@ public class VariableModule extends BaseModule {
 		Object obj = parser.evaluateLiteral(literal);
 		if (obj != null) {
 			variables.put(varName, obj);
+			System.out.println("Variable: Added variable " + varName + " with value: " + literal);
 		} else {
 			throw new IllegalArgumentException(
 			  "VariableHandler: For variable \"" + varName + "\" + cannot parse value: " + literal
 			);
 		}
+	}
+
+	@Override
+	public boolean isReservedWord(String word) {
+		return super.isReservedWord(word) || isVariable(word);
+	}
+
+	@Override
+	public Set<String> getReservedWords() {
+		Set<String> all = super.getReservedWords();
+		all.addAll(variables.keySet());
+		return all;
+	}
+
+	@Override
+	public boolean isVariable(String alias) {
+		return variables.containsKey(alias);
 	}
 }
 

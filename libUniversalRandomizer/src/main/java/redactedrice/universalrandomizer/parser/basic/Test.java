@@ -1,11 +1,10 @@
-package redactedrice.universalrandomizer.parser;
+package redactedrice.universalrandomizer.parser.basic;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import redactedrice.universalrandomizer.parser.basic.AliasModule;
-import redactedrice.universalrandomizer.parser.basic.SimpleModule;
+import redactedrice.universalrandomizer.parser.Parser;
 
 // Simple test for development to check the behavior is as expected
 public class Test {
@@ -18,34 +17,26 @@ public class Test {
 		parser.addSingleLineComment("#");
 		parser.addMultiLineComment("/*", "*/");
 	
-		parser.addHandler(new SimpleModule(
+		parser.addHandler(new LambdaModule(
 		    "definitions",
-		    line -> line.trim().startsWith("def "),
 		    line -> System.out.println("DEF → " + line),
 		    "def"
 		));
 		
-		parser.addHandler(new AliasModule());
+		parser.addHandler(new BasicAliasModule());
+		parser.addHandler(new BasicVariableModule());
 		
-		parser.addHandler(new SimpleModule(
+		parser.addHandler(new LambdaModule(
 			    "TestPrintHandler",
-			    line -> line.trim().startsWith("println "),
 			    line -> System.out.println("Print: " + line.substring(8))
 			));
-	
-		// Fallback (error)
-		parser.addHandler(new SimpleModule(
-		    "fallback",
-		    line -> true,
-		    line -> System.out.println("UNHANDLED → " + line)
-		));
 	
 	    // Test script as a multiline string
 	    String script = """
 	      # This is a comment (
 	      /* This is (
 	         a block comment */
-	      let foo = 42
+	      variable foo = 42
 	      let bar = true ->
 	         and something 
 	      def myFunc(x) \\

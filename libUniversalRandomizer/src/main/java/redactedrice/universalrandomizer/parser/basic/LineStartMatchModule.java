@@ -2,19 +2,34 @@ package redactedrice.universalrandomizer.parser.basic;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Predicate;
 
-public class SimpleModule extends BaseModule {
+import redactedrice.universalrandomizer.parser.Parser;
+import redactedrice.universalrandomizer.parser.ParserModule;
+
+/** A named DSL‐line handler carrying a back‐pointer to its parser. */
+public abstract class LineStartMatchModule implements ParserModule {
+    private final String name;
+    protected Parser parser;
     protected final Set<String> reservedWords;
-	
-	public SimpleModule(String name, Predicate<String> predicate, String... reservedWords) {
-        super(name, predicate);
+
+    protected LineStartMatchModule(String name, String... reservedWords) {
+        this.name = name;
         
         this.reservedWords = new HashSet<>();
         for (String word : reservedWords) {
         	this.reservedWords.add(word);
         }
     }
+
+    /** The unique name you gave this handler. */
+    public String getName() {
+        return name;
+    }
+
+	@Override
+    public void setParser(Parser parser) {
+    	this.parser = parser;
+    }    
 
 	@Override
 	public boolean matches(String logicalLine) {
@@ -27,11 +42,6 @@ public class SimpleModule extends BaseModule {
 	}
 
 	@Override
-	public void handle(String logicalLine) {
-		// TODO
-	}
-
-	@Override
 	public boolean isReservedWord(String word) {
 		return reservedWords.contains(word);
 	}
@@ -40,4 +50,5 @@ public class SimpleModule extends BaseModule {
 	public Set<String> getReservedWords() {
 		return reservedWords;
 	}
+	
 }

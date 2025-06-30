@@ -6,16 +6,15 @@ import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.regex.*;
 
-import redactedrice.universalrandomizer.parser.AliasHandler;
+import redactedrice.universalrandomizer.parser.AliasModule;
 
-public class AliasModule extends BaseModule implements AliasHandler {
+public class BasicAliasModule extends LineStartMatchModule implements AliasModule {
 	private final static Pattern aliasDef = Pattern.compile("^\\s*alias\\s+(\\w+)\\s*=\\s*(.+)$");
 	
 	private final Map<String,String> aliases = new LinkedHashMap<>();
 	
-	public AliasModule() { 
-		super("BasicAliasHandler", line -> aliasDef.matcher(line).matches());
-		reservedWords.add("alias");
+	public BasicAliasModule() { 
+		super("BasicAliasHandler", "alias");
 	}
 	
 	@Override
@@ -46,7 +45,20 @@ public class AliasModule extends BaseModule implements AliasHandler {
 	                           "' conflicts already defined alias and will be ignored!");
 	        return;
 	    }
+		System.out.println("Alias: Added alias " + key + " with value: " + val);
 	    aliases.put(key, val);
+	}
+
+	@Override
+	public boolean isReservedWord(String word) {
+		return super.isReservedWord(word) || isAlias(word);
+	}
+
+	@Override
+	public Set<String> getReservedWords() {
+		Set<String> all = super.getReservedWords();
+		all.addAll(aliases.keySet());
+		return all;
 	}
 	
 	@Override
@@ -61,12 +73,7 @@ public class AliasModule extends BaseModule implements AliasHandler {
 	}
 
 	@Override
-	public boolean contains(String alias) {
+	public boolean isAlias(String alias) {
 		return aliases.containsKey(alias);
-	}
-
-	@Override
-	public Set<String> getReservedWords() {
-		return aliases.keySet();
 	}
 }
