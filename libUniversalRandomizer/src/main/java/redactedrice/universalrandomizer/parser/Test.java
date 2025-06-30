@@ -12,7 +12,6 @@ public class Test {
     public static void main(String[] args) throws IOException {
 		Parser parser = new Parser();
 		
-		parser.addLineEnd("\n");
 		parser.addLineContinue("\\");
 		parser.addLineContinue("->");
 		parser.addSingleLineComment("//");

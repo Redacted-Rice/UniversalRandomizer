@@ -1,10 +1,7 @@
 package redactedrice.universalrandomizer.parser;
 
-import java.util.Set;
 
 //File: AliasReplacer.java
-public interface AliasHandler {
+public interface AliasHandler extends ReservedWordHandler {
 	String replaceAliases(String line);
-	boolean contains(String alias);
-	Set<String> getAliases();
 }

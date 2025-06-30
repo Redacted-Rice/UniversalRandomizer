@@ -14,21 +14,17 @@ import java.util.Map.Entry;
  *   Handlers for parsing instructions
  */
 public class Parser {
-    private final Set<String> lineEnd = new HashSet<>();
     private final Set<String> lineContinue = new HashSet<>();
     private final Set<String> singleLineComment = new HashSet<>();
     private final Map<String, String> multiLineComment = new HashMap<>();
 
+    private final List<ReservedWordHandler> reservedWordHandlers = new ArrayList<>();
     private final List<AliasHandler> aliasHandlers = new ArrayList<>();
     private final List<VariableHandler> variableHandlers = new ArrayList<>();
     private final List<ParserModule> handlers = new ArrayList<>();
     private final Map<String, ParserModule> index = new HashMap<>();
 
-    // --------------- Configure parser Fns ----------------- 
-    public void addLineEnd(String token) {
-    	lineEnd.add(token);
-    }
-    
+    // --------------- Configure parser Fns -----------------     
     public void addLineContinue(String token) {
     	lineContinue.add(token);
     }
@@ -221,10 +217,15 @@ public class Parser {
     
     // ------------------ Getters ----------------------
     
+    // TODO make this a hashset with type as value?
+    // Then make all modules implement ReservedWordHandler?
     public Set<String> getAllReservedWords() {
         Set<String> all = new HashSet<>();
         for (ParserModule h : handlers) {
             all.addAll(h.getReservedWords());
+        }
+        for (ReservedWordHandler handler : reservedWordHandlers) {
+        	all.addAll(handler.getReservedWords());
         }
         return all;
     }
@@ -232,7 +233,7 @@ public class Parser {
     public Set<String> getAllAliases() {
         Set<String> all = new HashSet<>();
         for (AliasHandler aliaser : aliasHandlers) {
-            all.addAll(aliaser.getAliases());
+            all.addAll(aliaser.getReservedWords());
         }
         return all;
     }
@@ -240,7 +241,7 @@ public class Parser {
     public Set<String> getAllVariables() {
         Set<String> all = new HashSet<>();
         for (VariableHandler varHandler : variableHandlers) {
-            all.addAll(varHandler.getVariables());
+            all.addAll(varHandler.getReservedWords());
         }
         return all;
     }

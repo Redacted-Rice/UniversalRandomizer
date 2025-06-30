@@ -4,11 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class SimpleModule extends BaseModule {
+public class LambdaModule extends BaseModule {
+    private final ModuleLambdaFn handler;
     protected final Set<String> reservedWords;
 	
-	public SimpleModule(String name, Predicate<String> predicate, String... reservedWords) {
+	public LambdaModule(String name, Predicate<String> predicate, ModuleLambdaFn handler, String... reservedWords) {
         super(name, predicate);
+        this.handler = handler;
         
         this.reservedWords = new HashSet<>();
         for (String word : reservedWords) {
@@ -28,7 +30,7 @@ public class SimpleModule extends BaseModule {
 
 	@Override
 	public void handle(String logicalLine) {
-		// TODO
+		handler.handle(logicalLine);
 	}
 
 	@Override

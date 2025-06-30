@@ -66,7 +66,7 @@ public class AliasModule extends BaseModule implements AliasHandler {
 	}
 
 	@Override
-	public Set<String> getAliases() {
+	public Set<String> getReservedWords() {
 		return aliases.keySet();
 	}
 }
