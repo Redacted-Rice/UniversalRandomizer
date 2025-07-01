@@ -1,7 +1,7 @@
 package redactedrice.universalrandomizer.userobjectapis;
 
+
 @FunctionalInterface
-public interface Sumable<T>
-{
-	public T sum(T toAdd);
-}	
+public interface Sumable<T> {
+    public T sum(T toAdd);
+}
