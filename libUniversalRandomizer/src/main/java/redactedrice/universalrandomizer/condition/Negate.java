@@ -1,6 +1,6 @@
 package redactedrice.universalrandomizer.condition;
 
-public enum Negate 
-{
-	YES, NO
+
+public enum Negate {
+    YES, NO
 }
