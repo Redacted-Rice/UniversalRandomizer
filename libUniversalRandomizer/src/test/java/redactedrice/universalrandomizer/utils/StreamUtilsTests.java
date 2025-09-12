@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 
+import redactedrice.reflectionhelpers.utils.ConversionUtils;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import support.SimpleObject;
 
@@ -149,12 +150,11 @@ class StreamUtilsTests {
 
         assertEquals(0, StreamUtils.field(null, o -> o).count());
         assertEquals(0, StreamUtils.fieldCollection(null, o -> List.of(o)).count());
-        assertEquals(0, StreamUtils.fieldArray(null, o -> new Object[] { o
-        }).count());
-        assertEquals(0, StreamUtils.fieldStream(null, o -> Arrays.stream(new Object[] { o
-        })).count());
-        assertEquals(0, StreamUtils.fieldStream(null, o -> Arrays.stream(new Object[] { o
-        })).count());
+        assertEquals(0, StreamUtils.fieldArray(null, o -> new Object[] {o}).count());
+        assertEquals(0,
+                StreamUtils.fieldStream(null, o -> Arrays.stream(new Object[] {o})).count());
+        assertEquals(0,
+                StreamUtils.fieldStream(null, o -> Arrays.stream(new Object[] {o})).count());
         assertEquals(0, StreamUtils.fieldMapKeys(null, o -> new HashMap<Object, Object>()).count());
         assertEquals(0,
                 StreamUtils.fieldMapValues(null, o -> new HashMap<Object, Object>()).count());
