@@ -17,7 +17,6 @@ public class MultiPool<O, K, T> implements RandomizerMultiPool<O, T> {
         this.activePool = null;
     }
 
-    // TODO: Add more constructors eventually?
     public static <O2, K2, T2> MultiPool<O2, K2, T2> create(Map<K2, RandomizerPool<T2>> poolMap,
             MultiGetter<O2, K2> keyGetter) {
         if (poolMap == null || keyGetter == null) {

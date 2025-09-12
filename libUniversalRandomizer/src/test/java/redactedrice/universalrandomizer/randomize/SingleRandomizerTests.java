@@ -82,9 +82,4 @@ class SingleRandomizerTests {
         assertNull(SingleRandomizer.create(msNull));
         assertNull(SingleRandomizer.create(setterNull));
     }
-
-    @Test
-    void assignAndCheckEnforce() {
-        // TODO
-    }
 }

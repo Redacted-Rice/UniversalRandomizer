@@ -63,29 +63,25 @@ class ElimatePoolSetTests {
 
     @Test
     void reset() {
-        // Random rand = mock(Random.class);
-        // when(rand.nextInt(anyInt())).thenReturn(0);
-        //
-        // PeekPool<Integer> base = PeekPool.create(false, NON_DUPLICATE_VALS);
-        // EliminatePoolSet<Integer> pool = EliminatePoolSet.create(base, 1);
-        //
-        // pool.peek(rand);
-        // pool.selectPeeked();
-        // pool.peek(rand);
-        // pool.selectPeeked();
-        // pool.peek(rand);
-        // assertEquals(NON_DUPLICATE_VALS.size() - 2, pool.size(), "size returned wrong size for
-        // item pool");
-        // assertEquals(NON_DUPLICATE_VALS.size() - 3, pool.unpeekedSize(), "unpeekedSize returned
-        // wrong size for item pool");
-        //
-        // pool.reset();
-        // assertEquals(NON_DUPLICATE_VALS.size(), pool.size(), "size returned wrong size for item
-        // pool after reset");
-        // assertEquals(NON_DUPLICATE_VALS.size(), pool.unpeekedSize(), "unpeekedSize returned wrong
-        // size for item pool after reset");
-        //
-        // assertPoolEquals(EXPECTED_NON_DUPLICATE, pool);
+        Random rand = mock(Random.class);
+        when(rand.nextInt(anyInt())).thenReturn(0);
+
+        EliminatePool<Integer> pool = EliminatePool.create(NON_DUPLICATE_VALS);
+
+        // Get some values
+        int found = pool.get(rand);
+        int found2 = pool.get(rand);
+        // ensure they were removed
+        assertFalse(pool.getPool().contains(found));
+        assertFalse(pool.getPool().contains(found2));
+
+        // reset it
+        pool.reset();
+
+        // ensure the values were added back - we can't redo because pool doesn't preserve internal
+        // order when resetting
+        assertTrue(pool.getPool().contains(found));
+        assertTrue(pool.getPool().contains(found2));
     }
 
     @Test
@@ -164,7 +160,7 @@ class ElimatePoolSetTests {
         // ensure it didn't walk past the end
         assertNotNull(pool.get(rand));
 
-        // See that reset sets it back to the first
+        // See that reset sets it back to the first pool
         pool.reset();
 
         assertNotNull(pool.get(rand));
