@@ -12,3 +12,5 @@ plugins {
 
 rootProject.name = "UniversalRandomizer"
 include("libUniversalRandomizer")
+includeBuild("../ReflectionHelpers")
+includeBuild("../ModularParser")
