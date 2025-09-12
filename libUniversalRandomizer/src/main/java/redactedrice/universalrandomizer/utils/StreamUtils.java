@@ -21,7 +21,7 @@ public class StreamUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T, R> Stream<R> field(Stream<T> stream, Getter<T, R> getter) {
         if (getter == null || stream == null) {
             return Stream.empty();
@@ -29,7 +29,7 @@ public class StreamUtils {
         return stream.map(getter::get);
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T, R> Stream<R> fieldArray(Stream<T> stream, Getter<T, R[]> getter) {
         if (getter == null || stream == null) {
             return Stream.empty();
@@ -37,7 +37,7 @@ public class StreamUtils {
         return stream.flatMap(o -> Arrays.stream(getter.get(o)));
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T, C extends Collection<R>, R> Stream<R> fieldCollection(Stream<T> stream,
             Getter<T, C> getter) {
         if (getter == null || stream == null) {
@@ -46,7 +46,7 @@ public class StreamUtils {
         return stream.flatMap(obj -> getter.get(obj).stream());
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T, S extends Stream<R>, R> Stream<R> fieldStream(Stream<T> stream,
             Getter<T, S> getter) {
         if (getter == null || stream == null) {
@@ -55,7 +55,7 @@ public class StreamUtils {
         return stream.flatMap(getter::get);
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T, M extends Map<R, ?>, R> Stream<R> fieldMapKeys(Stream<T> stream,
             Getter<T, M> getter) {
         if (getter == null || stream == null) {
@@ -64,7 +64,7 @@ public class StreamUtils {
         return stream.flatMap(obj -> getter.get(obj).keySet().stream());
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T, M extends Map<?, R>, R> Stream<R> fieldMapValues(Stream<T> stream,
             Getter<T, M> getter) {
         if (getter == null || stream == null) {
@@ -73,7 +73,7 @@ public class StreamUtils {
         return stream.flatMap(obj -> getter.get(obj).values().stream());
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     @SuppressWarnings("unchecked")
     public static <T> Stream<T> castType(Stream<?> stream) {
         if (stream == null) {
@@ -86,20 +86,20 @@ public class StreamUtils {
         if (stream == null) {
             return Stream.empty();
         }
-        return stream.map(o -> clazz.cast(o));
+        return stream.map(clazz::cast);
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T> Stream<T> shuffle(Stream<T> stream) {
         return shuffle(stream, null);
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T> Stream<T> shuffle(Stream<T> stream, long seed) {
         return shuffle(stream, new Random(seed));
     }
 
-    /// Modifies & returns passed stream
+    // Modifies & returns passed stream
     public static <T> Stream<T> shuffle(Stream<T> stream, Random rand) {
         if (stream == null) {
             return Stream.empty();
@@ -109,7 +109,7 @@ public class StreamUtils {
                 .sorted(RandomOrdering::sortBySortingValue).map(RandomOrdering::getObject);
     }
 
-    /// Consumes passed stream
+    // Consumes passed stream
     public static <R, T> Map<R, List<T>> group(Stream<T> stream, Getter<T, R> groupingFn) {
         if (stream == null || groupingFn == null) {
             return Collections.emptyMap();

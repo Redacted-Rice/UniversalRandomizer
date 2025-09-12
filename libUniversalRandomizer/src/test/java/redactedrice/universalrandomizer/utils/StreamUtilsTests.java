@@ -149,7 +149,7 @@ class StreamUtilsTests {
         assertIterableEquals(expectedStringMultiple, resultString.toList());
 
         assertEquals(0, StreamUtils.field(null, o -> o).count());
-        assertEquals(0, StreamUtils.fieldCollection(null, o -> List.of(o)).count());
+        assertEquals(0, StreamUtils.fieldCollection(null, List::of).count());
         assertEquals(0, StreamUtils.fieldArray(null, o -> new Object[] {o}).count());
         assertEquals(0,
                 StreamUtils.fieldStream(null, o -> Arrays.stream(new Object[] {o})).count());

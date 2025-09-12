@@ -1,8 +1,11 @@
 package redactedrice.universalrandomizer.condition;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,7 +22,7 @@ import support.SimpleObject;
 
 class CompoundConditionTests {
     @SuppressWarnings("serial")
-    final Map<String, SimpleObject> OBJ_LIST = Collections
+    static final Map<String, SimpleObject> OBJ_LIST = Collections
             .unmodifiableMap(new LinkedHashMap<String, SimpleObject>() {
                 {
                     put("1 5", new SimpleObject("1", 5));
@@ -30,7 +33,7 @@ class CompoundConditionTests {
             });
 
     @SuppressWarnings("serial")
-    final Map<String, Condition<SimpleObject>> SIMPLE_CONDS = Collections
+    static final Map<String, Condition<SimpleObject>> SIMPLE_CONDS = Collections
             .unmodifiableMap(new LinkedHashMap<String, Condition<SimpleObject>>() {
                 {
                     put("intEq5", SimpleCondition.create(o -> o.intField, Negate.NO,

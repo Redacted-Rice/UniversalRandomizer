@@ -1,9 +1,15 @@
 package redactedrice.universalrandomizer.pool;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,14 +22,15 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("serial")
 class ElimatePoolSetTests {
 
-    final List<Integer> NON_DUPLICATE_VALS = List.of(1, -4, 5, 99);
-    final List<Integer> DUPLICATE_VALS = List.of(1, -4, 5, 1, 99, 1, 5);
-    final Integer NON_EXISTING_VAL = 7;
+    static final List<Integer> NON_DUPLICATE_VALS = List.of(1, -4, 5, 99);
+    static final List<Integer> DUPLICATE_VALS = List.of(1, -4, 5, 1, 99, 1, 5);
+    static final Integer NON_EXISTING_VAL = 7;
 
-    final Integer[] NON_DUPLICATE_ARRAY = (Integer[]) NON_DUPLICATE_VALS.toArray(new Integer[0]);
-    final Integer[] DUPLICATE_ARRAY = (Integer[]) DUPLICATE_VALS.toArray(new Integer[0]);
+    static final Integer[] NON_DUPLICATE_ARRAY = (Integer[]) NON_DUPLICATE_VALS
+            .toArray(new Integer[0]);
+    static final Integer[] DUPLICATE_ARRAY = (Integer[]) DUPLICATE_VALS.toArray(new Integer[0]);
 
-    final Map<Integer, Integer> EXPECTED_NON_DUPLICATE = Collections
+    static final Map<Integer, Integer> EXPECTED_NON_DUPLICATE = Collections
             .unmodifiableMap(new HashMap<Integer, Integer>() {
                 {
                     put(-4, 1);
@@ -33,7 +40,7 @@ class ElimatePoolSetTests {
                 }
             });
 
-    final Map<Integer, Integer> EXPECTED_DUPLICATE = Collections
+    static final Map<Integer, Integer> EXPECTED_DUPLICATE = Collections
             .unmodifiableMap(new HashMap<Integer, Integer>() {
                 {
                     put(-4, 1);

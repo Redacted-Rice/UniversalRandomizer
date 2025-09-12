@@ -5,9 +5,13 @@ import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.userobjectapis.MultiSetter;
 import redactedrice.universalrandomizer.userobjectapis.Setter;
 
-/// Randomizes single items at a time but can randomize a field multiple times
-/// i.e. randomizing a list field by calling and indexed setter multiple times
+// Randomizes single items at a time but can randomize a field multiple times
+// i.e. randomizing a list field by calling and indexed setter multiple times
 public class SingleRandomizer {
+    private SingleRandomizer() {
+        throw new IllegalStateException("Utility class");
+    }
+
     // Create a multi setter with count from object
     public static <T, P> Randomizer<T, P> create(MultiSetter<T, P> setter,
             Getter<T, Integer> countGetter) {

@@ -5,11 +5,15 @@ import java.util.Collection;
 
 import redactedrice.universalrandomizer.userobjectapis.MultiSetter;
 
-/// Randomizes single items at a time but can randomize a field multiple times
-/// i.e. randomizing a list field by calling and indexed setter multiple times, once
-/// for each item in the collection and only verifies the object after all setting is
-/// done
+// Randomizes single items at a time but can randomize a field multiple times
+// i.e. randomizing a list field by calling and indexed setter multiple times, once
+// for each item in the collection and only verifies the object after all setting is
+// done
 public class MultiRandomizer {
+    private MultiRandomizer() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static int return1(Object o) {
         // We have this function so we don't have to keep creating lambda
         // functions. Ignore sonar lint saying to use a constant since
@@ -24,7 +28,6 @@ public class MultiRandomizer {
         if (setter == null) {
             return null;
         }
-        return new Randomizer<>(new MultiSetterWrapper<T2, P2, S2>(setter),
-                MultiRandomizer::return1);
+        return new Randomizer<>(new MultiSetterWrapper<>(setter), MultiRandomizer::return1);
     }
 }
