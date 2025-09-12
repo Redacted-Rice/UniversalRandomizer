@@ -38,18 +38,18 @@ import support.SimpleObjectUtils;
 // reuse class is the most simple of the classes
 class RandomizerTests {
 
-    final List<Integer> NON_DUPLICATE_VALS = List.of(1, -4, 5, 99);
-    final List<Integer> DUPLICATE_VALS = List.of(1, -4, 5, 1, 99, 1, 5);
-    final Integer NON_EXISTING_VAL = 7;
+    static final List<Integer> NON_DUPLICATE_VALS = List.of(1, -4, 5, 99);
+    static final List<Integer> DUPLICATE_VALS = List.of(1, -4, 5, 1, 99, 1, 5);
+    static final Integer NON_EXISTING_VAL = 7;
 
-    final static Setter<SimpleObject, Integer> setterInt = (o, v) -> {
+    static final Setter<SimpleObject, Integer> setterInt = (o, v) -> {
         if (v == null) {
             return false;
         }
         o.intField = v;
         return true;
     };
-    final static Getter<SimpleObject, Integer> getterInt = o -> o.intField;
+    static final Getter<SimpleObject, Integer> getterInt = o -> o.intField;
 
     public static List<SimpleObject> createSimpleObjects(int number) {
         List<SimpleObject> list = new LinkedList<>();
@@ -129,8 +129,8 @@ class RandomizerTests {
     @Test
     void perform_someFailed() {
         final int LIST_SIZE = 10;
-        final List<Integer> POOL_VALS = Arrays.asList(0, 1, 2, null, 4, null, 6, 7, 8, null);
-        final List<Integer> EXPECTED_VALS = Arrays.asList(0, 1, 2, 300, 4, 500, 6, 7, 8, 900);
+        final List<Integer> poolVals = Arrays.asList(0, 1, 2, null, 4, null, 6, 7, 8, null);
+        final List<Integer> expectedVals = Arrays.asList(0, 1, 2, 300, 4, 500, 6, 7, 8, 900);
 
         // Set mocks
         Random rand = mock(Random.class);
@@ -138,7 +138,7 @@ class RandomizerTests {
 
         @SuppressWarnings("unchecked")
         ReusePool<Integer> pool = mock(ReusePool.class);
-        when(pool.get(any())).thenAnswer(AdditionalAnswers.returnsElementsOf(POOL_VALS));
+        when(pool.get(any())).thenAnswer(AdditionalAnswers.returnsElementsOf(poolVals));
         when(pool.copy()).thenReturn(pool);
 
         // Create test data and object
@@ -148,15 +148,15 @@ class RandomizerTests {
         // Perform test and check results
         assertFalse(test.perform(list.stream(), pool, rand));
         List<Integer> results = SimpleObjectUtils.toIntFieldList(list);
-        assertIterableEquals(EXPECTED_VALS, results);
+        assertIterableEquals(expectedVals, results);
     }
 
     @Test
     void perform_enforce_null() {
         final int LIST_SIZE = 10;
-        final List<Integer> POOL_VALS = Arrays.asList(0, 1, null, 3, 4, null, 6, 7, 8, 9);
+        final List<Integer> poolVals = Arrays.asList(0, 1, null, 3, 4, null, 6, 7, 8, 9);
         // 5 will be excluded by the enforce
-        final List<Integer> EXPECTED_VALS = Arrays.asList(0, 1, 200, 3, 4, 500, 6, 7, 8, 9);
+        final List<Integer> expectedVals = Arrays.asList(0, 1, 200, 3, 4, 500, 6, 7, 8, 9);
 
         // Setup mocks
         Random rand = mock(Random.class);
@@ -164,7 +164,7 @@ class RandomizerTests {
 
         @SuppressWarnings("unchecked")
         ReusePool<Integer> pool = mock(ReusePool.class);
-        when(pool.get(any())).thenAnswer(AdditionalAnswers.returnsElementsOf(POOL_VALS));
+        when(pool.get(any())).thenAnswer(AdditionalAnswers.returnsElementsOf(poolVals));
         when(pool.copy()).thenReturn(pool);
 
         List<SimpleObject> list = createSimpleObjects(LIST_SIZE);
@@ -173,7 +173,7 @@ class RandomizerTests {
         // Perform test and check results
         assertFalse(test.perform(list.stream(), pool, rand));
         List<Integer> results = SimpleObjectUtils.toIntFieldList(list);
-        assertIterableEquals(EXPECTED_VALS, results);
+        assertIterableEquals(expectedVals, results);
     }
 
     @Test
@@ -181,25 +181,24 @@ class RandomizerTests {
         Random rand = mock(Random.class);
         when(rand.nextInt(anyInt())).thenReturn(0);
 
-        final List<Integer> TEST_VALUES = List.of(1, 5, -4);
+        final List<Integer> testVals = List.of(1, 5, -4);
         final int REPEATS = 2;
 
         List<SimpleObject> objs = new LinkedList<>();
-        for (int i = 0; i < TEST_VALUES.size() * REPEATS; i++) {
+        for (int i = 0; i < testVals.size() * REPEATS; i++) {
             objs.add(new SimpleObject("name" + i, i * 100));
         }
 
-        EliminatePoolSet<Integer> pool = EliminatePoolSet.create(EliminatePool.create(TEST_VALUES),
-                3);
+        EliminatePoolSet<Integer> pool = EliminatePoolSet.create(EliminatePool.create(testVals), 3);
 
         Randomizer<SimpleObject, Integer> test = SingleRandomizer
                 .create(SetterNoReturn.asMultiSetter(SimpleObject::setField));
 
         assertTrue(test.perform(objs.stream(), pool, rand));
-        for (int i = 0; i < TEST_VALUES.size(); i++) {
+        for (int i = 0; i < testVals.size(); i++) {
             final int final_i = i;
             assertEquals(REPEATS,
-                    objs.stream().filter(s -> s.intField == TEST_VALUES.get(final_i)).count());
+                    objs.stream().filter(s -> s.intField == testVals.get(final_i)).count());
         }
     }
 
@@ -208,15 +207,14 @@ class RandomizerTests {
         Random rand = mock(Random.class);
         when(rand.nextInt(anyInt())).thenReturn(0);
 
-        final List<Integer> TEST_VALUES = List.of(1, 5, -4);
+        final List<Integer> testVals = List.of(1, 5, -4);
 
         List<SimpleObject> objs = new LinkedList<>();
         for (int i = 0; i < 7; i++) {
             objs.add(new SimpleObject("name" + i, i * 100));
         }
 
-        EliminatePoolSet<Integer> pool = EliminatePoolSet.create(EliminatePool.create(TEST_VALUES),
-                2);
+        EliminatePoolSet<Integer> pool = EliminatePoolSet.create(EliminatePool.create(testVals), 2);
 
         Randomizer<SimpleObject, Integer> test = SingleRandomizer
                 .create(SetterNoReturn.asMultiSetter(SimpleObject::setField));

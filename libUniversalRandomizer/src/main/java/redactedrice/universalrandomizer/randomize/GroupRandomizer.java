@@ -7,16 +7,20 @@ import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.userobjectapis.MultiSetter;
 import redactedrice.universalrandomizer.userobjectapis.Setter;
 
-/// Randomizes single items at a time but can randomize a field multiple times
-/// i.e. randomizing a list field by calling and indexed setter multiple times
+// Randomizes single items at a time but can randomize a field multiple times
+// i.e. randomizing a list field by calling and indexed setter multiple times
 public class GroupRandomizer {
+    private GroupRandomizer() {
+        throw new IllegalStateException("Utility class");
+    }
+
     // Create a multi setter with count from object
     public static <T extends Collection<O>, O, P extends Collection<S>, S> Randomizer<T, P> create(
             MultiSetter<O, S> setter, Getter<T, Integer> countGetter) {
         if (setter == null || countGetter == null) {
             return null;
         }
-        return new Randomizer<>(new GroupSetterWrapper<T, O, P, S>(setter), countGetter);
+        return new Randomizer<>(new GroupSetterWrapper<>(setter), countGetter);
     }
 
     // Create a multi setter with fixed count

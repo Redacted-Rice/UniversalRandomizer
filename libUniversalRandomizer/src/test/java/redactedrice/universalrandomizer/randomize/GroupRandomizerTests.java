@@ -30,9 +30,9 @@ import support.SimpleObject;
 // reuse class is the most simple of the classes
 class GroupRandomizerTests {
 
-    final List<Integer> NON_DUPLICATE_VALS = List.of(1, -4, 5, 99);
-    final List<Integer> DUPLICATE_VALS = List.of(1, -4, 5, 1, 99, 1, 5);
-    final Integer NON_EXISTING_VAL = 7;
+    static final List<Integer> NON_DUPLICATE_VALS = List.of(1, -4, 5, 99);
+    static final List<Integer> DUPLICATE_VALS = List.of(1, -4, 5, 1, 99, 1, 5);
+    static final Integer NON_EXISTING_VAL = 7;
 
     @Test
     void create() {

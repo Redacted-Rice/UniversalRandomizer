@@ -1,7 +1,8 @@
 package redactedrice.universalrandomizer.utils;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -35,14 +36,13 @@ class CreationUtilsTests {
 
         rangeSco = CreationUtils.createRange(new SumableComparableObject(0),
                 new SumableComparableObject(13), new SumableComparableObject(3),
-                (Comparator<SumableComparableObject>) (lhs, rhs) -> lhs.compareTo(rhs));
+                (Comparator<SumableComparableObject>) Comparable::compareTo);
         assertScoCollectionEquals(expected, rangeSco);
 
         Collection<Integer> range = CreationUtils.createRange(0, 12, 3, (i1, i2) -> i1 + i2);
         assertIterableEquals(expected, range);
 
-        range = CreationUtils.createRange(0, 13, 3, (lhs, rhs) -> lhs.compareTo(rhs),
-                (i1, i2) -> i1 + i2);
+        range = CreationUtils.createRange(0, 13, 3, Comparable::compareTo, (i1, i2) -> i1 + i2);
         assertIterableEquals(expected, range);
     }
 }
