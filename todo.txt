@@ -1,0 +1,6 @@
+* Have random ordering provide a consistent tie breaker
+
+Potential
+* Add contains Comparison enum value for string/tests
+* Add more multipool constructors
+* Add a delayed full object enforce option on randomizer

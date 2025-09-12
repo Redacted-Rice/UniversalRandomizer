@@ -12,8 +12,6 @@ import support.SimpleObject;
 
 class RandomOrderingTests {
 
-    // TODO: Null tests
-
     @Test
     void create() {
         SimpleObject so = new SimpleObject("test obj", 3);

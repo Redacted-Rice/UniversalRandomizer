@@ -43,8 +43,6 @@ public class RandomOrdering<T> {
     }
 
     public static <T> int sortBySortingValue(RandomOrdering<T> lhs, RandomOrdering<T> rhs) {
-        // TODO: need a way to avoid duplicate values? Maybe secondary that is set when there is a
-        // conflict?
         return Long.compare(lhs.getSortingValue(), rhs.getSortingValue());
     }
 }

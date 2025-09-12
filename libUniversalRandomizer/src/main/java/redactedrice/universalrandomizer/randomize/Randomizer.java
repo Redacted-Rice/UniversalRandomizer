@@ -74,8 +74,6 @@ public class Randomizer<T, P> {
         return !assignValue(obj);
     }
 
-    // Think on delayed checking of set values?
-    // TODO: Add a delayed, full object enforce?
     protected boolean assignValue(T obj) {
         boolean success = true;
         int times = countGetter.get(obj);
