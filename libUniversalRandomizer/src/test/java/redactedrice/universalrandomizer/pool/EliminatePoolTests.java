@@ -76,7 +76,7 @@ class EliminatePoolTests {
         assertEquals(DUPLICATE_ARRAY.length, dup.getPool().size());
         assertTrue(dup.getRemoved().isEmpty());
 
-        EliminatePool<Integer> nonDupFromDup = EliminatePool.createNoDups(DUPLICATE_ARRAY);
+        EliminatePool<Integer> nonDupFromDup = EliminatePool.create(true, DUPLICATE_ARRAY);
         assertPoolEquals(EXPECTED_NON_DUPLICATE, nonDupFromDup);
         assertEquals(EXPECTED_NON_DUPLICATE.size(), nonDupFromDup.getPool().size());
         assertTrue(nonDupFromDup.getRemoved().isEmpty());
@@ -91,13 +91,13 @@ class EliminatePoolTests {
         EliminatePool<Integer> dup = EliminatePool.create(Arrays.asList(DUPLICATE_ARRAY));
         assertPoolEquals(EXPECTED_DUPLICATE, dup);
 
-        EliminatePool<Integer> nonDupFromDup = EliminatePool
-                .createNoDups(Arrays.asList(DUPLICATE_ARRAY));
+        EliminatePool<Integer> nonDupFromDup = EliminatePool.create(true,
+                Arrays.asList(DUPLICATE_ARRAY));
         assertPoolEquals(EXPECTED_NON_DUPLICATE, nonDupFromDup);
 
         // Bad input
         assertNull(EliminatePool.create((Collection<Integer>) null));
-        assertNull(EliminatePool.createNoDups((Collection<Integer>) null));
+        assertNull(EliminatePool.create(true, (Collection<Integer>) null));
     }
 
     @Test

@@ -12,7 +12,7 @@ public class EliminatePool<T> implements RandomizerSinglePool<T> {
     private ArrayList<T> pool;
     private LinkedList<T> removed;
 
-    protected EliminatePool(Collection<T> valCollection, boolean removeDuplicates) {
+    protected EliminatePool(boolean removeDuplicates, Collection<T> valCollection) {
         if (removeDuplicates) {
             // Convert to a set first to remove duplicates
             pool = new ArrayList<>(new HashSet<>(valCollection));
@@ -28,21 +28,22 @@ public class EliminatePool<T> implements RandomizerSinglePool<T> {
     }
 
     public static <V> EliminatePool<V> createEmpty() {
-        return new EliminatePool<>(new ArrayList<>(), false);
+        return new EliminatePool<>(false, new ArrayList<>());
     }
 
     public static <V> EliminatePool<V> create(Collection<V> valCollection) {
         if (valCollection == null) {
             return null;
         }
-        return new EliminatePool<>(valCollection, false);
+        return create(false, valCollection);
     }
 
-    public static <V> EliminatePool<V> createNoDups(Collection<V> valCollection) {
+    public static <V> EliminatePool<V> create(boolean removeDuplicates,
+            Collection<V> valCollection) {
         if (valCollection == null) {
             return null;
         }
-        return new EliminatePool<>(valCollection, true);
+        return new EliminatePool<>(removeDuplicates, valCollection);
     }
 
     @SafeVarargs
@@ -51,8 +52,8 @@ public class EliminatePool<T> implements RandomizerSinglePool<T> {
     }
 
     @SafeVarargs
-    public static <V> EliminatePool<V> createNoDups(V... values) {
-        return createNoDups(List.of(values));
+    public static <V> EliminatePool<V> create(boolean removeDuplicates, V... values) {
+        return create(removeDuplicates, List.of(values));
     }
 
     public EliminatePool<T> copy() {

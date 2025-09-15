@@ -10,7 +10,7 @@ import java.util.Random;
 public class ReusePool<T> implements RandomizerSinglePool<T> {
     private ArrayList<T> pool;
 
-    protected ReusePool(Collection<T> valCollection, boolean removeDuplicates) {
+    protected ReusePool(boolean removeDuplicates, Collection<T> valCollection) {
         if (removeDuplicates) {
             // Convert to a set first to remove duplicates
             pool = new ArrayList<>(new HashSet<>(valCollection));
@@ -24,31 +24,31 @@ public class ReusePool<T> implements RandomizerSinglePool<T> {
     }
 
     public static <V> ReusePool<V> createEmpty() {
-        return new ReusePool<>(new ArrayList<>(), false);
+        return new ReusePool<>(false, new ArrayList<>());
+    }
+
+    public static <V> ReusePool<V> create(boolean removeDuplicates, Collection<V> valCollection) {
+        if (valCollection == null) {
+            return null;
+        }
+        return new ReusePool<>(removeDuplicates, valCollection);
     }
 
     public static <V> ReusePool<V> create(Collection<V> valCollection) {
         if (valCollection == null) {
             return null;
         }
-        return new ReusePool<>(valCollection, false);
+        return create(false, valCollection);
     }
 
-    public static <V> ReusePool<V> createNoDups(Collection<V> valCollection) {
-        if (valCollection == null) {
-            return null;
-        }
-        return new ReusePool<>(valCollection, true);
+    @SafeVarargs
+    public static <V> ReusePool<V> create(boolean removeDuplicates, V... values) {
+        return create(removeDuplicates, List.of(values));
     }
 
     @SafeVarargs
     public static <V> ReusePool<V> create(V... values) {
         return create(List.of(values));
-    }
-
-    @SafeVarargs
-    public static <V> ReusePool<V> createNoDups(V... values) {
-        return createNoDups(List.of(values));
     }
 
     public ReusePool<T> copy() {
