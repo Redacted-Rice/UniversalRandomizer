@@ -67,7 +67,7 @@ class ReusePoolTests {
         assertPoolEquals(EXPECTED_NON_DUPLICATE, nonDup);
         assertEquals(EXPECTED_NON_DUPLICATE.size(), nonDup.getPool().size());
 
-        ReusePool<Integer> nonDupFromDup = ReusePool.createNoDups(DUPLICATE_ARRAY);
+        ReusePool<Integer> nonDupFromDup = ReusePool.create(true, DUPLICATE_ARRAY);
         assertPoolEquals(EXPECTED_NON_DUPLICATE, nonDupFromDup);
         assertEquals(EXPECTED_NON_DUPLICATE.size(), nonDupFromDup.getPool().size());
     }
@@ -81,12 +81,12 @@ class ReusePoolTests {
         ReusePool<Integer> dup = ReusePool.create(Arrays.asList(DUPLICATE_ARRAY));
         assertPoolEquals(EXPECTED_DUPLICATE, dup);
 
-        ReusePool<Integer> nonDupFromDup = ReusePool.createNoDups(Arrays.asList(DUPLICATE_ARRAY));
+        ReusePool<Integer> nonDupFromDup = ReusePool.create(true, Arrays.asList(DUPLICATE_ARRAY));
         assertPoolEquals(EXPECTED_NON_DUPLICATE, nonDupFromDup);
 
         // Bad input
         assertNull(ReusePool.create((Collection<Integer>) null));
-        assertNull(ReusePool.createNoDups((Collection<Integer>) null));
+        assertNull(ReusePool.create(true, (Collection<Integer>) null));
     }
 
     @Test
