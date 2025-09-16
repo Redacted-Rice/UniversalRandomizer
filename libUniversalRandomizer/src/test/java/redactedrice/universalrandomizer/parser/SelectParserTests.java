@@ -22,6 +22,7 @@ import redactedrice.modularparser.literal.BaseArgumentChainableLiteral;
 import redactedrice.modularparser.literal.LiteralSupporter;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import support.SimpleObject;
+import support.SimpleObjectUtils;
 
 class SelectParserTest {
     private ModularParser parser;
@@ -71,7 +72,7 @@ class SelectParserTest {
 
     @Test
     void tryEvaluateObject() {
-        List<SimpleObject> soList = List.of(new SimpleObject("so1", 1), new SimpleObject("so2", 2));
+        List<SimpleObject> soList = SimpleObjectUtils.soList(3);
         List<Integer> expectedInts = soList.stream().map(o -> o.intField).toList();
 
         Getter<SimpleObject, Integer> intGetter = o -> o.intField;

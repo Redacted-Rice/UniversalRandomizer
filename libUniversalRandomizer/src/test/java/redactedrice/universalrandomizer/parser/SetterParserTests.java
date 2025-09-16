@@ -2,7 +2,7 @@ package redactedrice.universalrandomizer.parser;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -18,17 +18,17 @@ import redactedrice.modularparser.core.Response;
 import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentChainableLiteral;
 import redactedrice.modularparser.literal.LiteralSupporter;
-import redactedrice.universalrandomizer.userobjectapis.Getter;
+import redactedrice.universalrandomizer.userobjectapis.Setter;
 import support.SimpleObject;
 
-class GetterParserTests {
+class SetterParserTests {
     private ModularParser parser;
     private LiteralSupporter literalSupporter;
     private Grouper grouper;
-    private GetterParser testee;
+    private SetterParser testee;
 
-    static final String NAME = GetterParser.class.getSimpleName();
-    static final String KEYWORD = "getter";
+    static final String NAME = SetterParser.class.getSimpleName();
+    static final String KEYWORD = "setter";
 
     @BeforeEach
     void setup() {
@@ -37,7 +37,7 @@ class GetterParserTests {
         grouper = mock(Grouper.class);
 
         when(parser.getSupporterOfType(LiteralSupporter.class)).thenReturn(literalSupporter);
-        testee = new GetterParser(grouper);
+        testee = new SetterParser(grouper);
         testee.setParser(parser);
         testee.setModuleRefs();
     }
@@ -46,7 +46,7 @@ class GetterParserTests {
     void defaultGrouper() {
         BaseArgumentChainableLiteral.setDefaultGrouper(grouper);
         assertEquals(grouper, BaseArgumentChainableLiteral.getDefaultGrouper());
-        GetterParser defaultGrouper = new GetterParser();
+        SetterParser defaultGrouper = new SetterParser();
         assertEquals(grouper, defaultGrouper.getGrouper());
 
         // Set it back to null for other tests and test that constructor ensures not null
@@ -67,13 +67,18 @@ class GetterParserTests {
     @SuppressWarnings("unchecked")
     @Test
     void tryEvaluateObject() {
-        Map<String, Object> args = Map.of("field", "intField");
+        Map<String, Object> args = Map.of("field", "setIntFieldReturn()");
         Response<Object> result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
 
         SimpleObject testObj = new SimpleObject("so1", 1);
-        assertEquals(testObj.intField, ((Getter<Object, Object>) result.getValue()).get(testObj));
-        assertNull(((Getter<Object, Object>) result.getValue()).get("some bad object"));
+        assertTrue(((Setter<Object, Object>) result.getValue()).setReturn(testObj, 2));
+        assertEquals(2, testObj.intField);
+        // Setter doesn't allow negative
+        assertFalse(((Setter<Object, Object>) result.getValue()).setReturn(testObj, -1));
+        assertEquals(2, testObj.intField);
+        assertFalse(((Setter<Object, Object>) result.getValue()).setReturn(testObj, "bad"));
+        assertEquals(2, testObj.intField);
 
         // Test bad args
         args = Map.of("field", 5);
@@ -85,23 +90,32 @@ class GetterParserTests {
     void parse() {
         SimpleObject testObj = new SimpleObject("so1", 1);
 
-        Response<Getter<Object, Object>> result = GetterParser.parse("intField");
+        Response<Setter<Object, Object>> result = SetterParser.parse("setIntFieldReturn()");
         assertTrue(result.wasValueReturned());
-        assertEquals(testObj.intField, ((Getter<Object, Object>) result.getValue()).get(testObj));
-        assertNull(((Getter<Object, Object>) result.getValue()).get("some bad object"));
+        assertTrue(((Setter<Object, Object>) result.getValue()).setReturn(testObj, 2));
+        assertEquals(2, testObj.intField);
+        // Setter doesn't allow negative
+        assertFalse(((Setter<Object, Object>) result.getValue()).setReturn(testObj, -1));
+        assertEquals(2, testObj.intField);
+        assertFalse(((Setter<Object, Object>) result.getValue()).setReturn(testObj, "bad"));
+        assertEquals(2, testObj.intField);
 
-        Getter<SimpleObject, Integer> intGetter = o -> o.intField;
-        result = GetterParser.parse((Object) intGetter);
+        Setter<SimpleObject, Integer> intSetter = SimpleObject::setIntFieldReturn;
+        result = SetterParser.parse((Object) intSetter);
         assertTrue(result.wasValueReturned());
-        assertEquals(testObj.intField, ((Getter<Object, Object>) result.getValue()).get(testObj));
+        assertTrue(((Setter<Object, Object>) result.getValue()).setReturn(testObj, 2));
+        assertEquals(2, testObj.intField);
+        // Setter doesn't allow negative
+        assertFalse(((Setter<Object, Object>) result.getValue()).setReturn(testObj, -1));
+        assertEquals(2, testObj.intField);
         // For now this is unsafe and throws. In the future we may make it safe and instead
         // return null
-        Getter<Object, Object> resultAsGetter = ((Getter<Object, Object>) result.getValue());
+        Setter<Object, Object> resultAsSetter = ((Setter<Object, Object>) result.getValue());
         assertThrows(ClassCastException.class, () -> {
-            resultAsGetter.get("some bad object");
+            resultAsSetter.setReturn(testObj, "bad");
         });
 
-        result = GetterParser.parse(5);
+        result = SetterParser.parse(5);
         assertTrue(result.wasError());
     }
 }
