@@ -19,8 +19,8 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
 import redactedrice.universalrandomizer.userobjectapis.MultiGetter;
-import support.SimpleObject;
 
 @SuppressWarnings("serial")
 class MultiPoolTests {

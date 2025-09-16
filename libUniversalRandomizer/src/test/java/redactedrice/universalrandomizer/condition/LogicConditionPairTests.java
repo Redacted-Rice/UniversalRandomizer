@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
 import redactedrice.universalrandomizer.userobjectapis.Condition;
-import support.SimpleObject;
 
 class LogicConditionPairTests {
     @Test

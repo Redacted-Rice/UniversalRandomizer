@@ -12,7 +12,7 @@ import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.utils.StreamUtils;
 
 public class SelectParser extends BaseArgumentChainableLiteral {
-    private static final String[] argsOrdered = new String[] {"stream", "field"};
+    private static final String[] argsOrdered = new String[] {"from", "field"};
 
     public SelectParser() {
         this(null);

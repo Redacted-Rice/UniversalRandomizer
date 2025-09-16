@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import support.SumableComparableObject;
+import redactedrice.universalrandomizer.testsupport.SumableComparableObject;
 
 class CreationUtilsTests {
 

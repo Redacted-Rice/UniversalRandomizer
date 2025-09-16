@@ -19,9 +19,9 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import redactedrice.universalrandomizer.pool.EliminatePool;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
 import redactedrice.universalrandomizer.userobjectapis.MultiSetter;
 import redactedrice.universalrandomizer.userobjectapis.MultiSetterNoReturn;
-import support.SimpleObject;
 
 // Tests the Randomizer Reuse class and by extension the Randomizer class since the
 // reuse class is the most simple of the classes

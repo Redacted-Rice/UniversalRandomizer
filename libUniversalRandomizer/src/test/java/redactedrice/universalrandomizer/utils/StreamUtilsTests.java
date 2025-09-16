@@ -22,8 +22,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 
 import redactedrice.reflectionhelpers.utils.ConversionUtils;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
-import support.SimpleObject;
 
 class StreamUtilsTests {
 
