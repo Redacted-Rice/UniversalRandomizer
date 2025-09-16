@@ -18,6 +18,8 @@ import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentChainableLiteral;
 import redactedrice.modularparser.literal.LiteralSupporter;
 import redactedrice.universalrandomizer.pool.EliminatePoolSet;
+import redactedrice.universalrandomizer.pool.RandomizerPool;
+import redactedrice.universalrandomizer.pool.RandomizerSinglePool;
 import redactedrice.universalrandomizer.pool.ReusePool;
 import support.SimpleObject;
 import support.SimpleObjectUtils;
@@ -126,6 +128,25 @@ class PoolParserTests {
         args = Map.of("basedon", soList.stream(), "type", "false", "duplicates", "allow", "depth",
                 "bad");
         result = testee.tryEvaluateObject(args);
+        assertTrue(result.wasError());
+    }
+
+    @Test
+    void parse() {
+        List<SimpleObject> soList = SimpleObjectUtils.soList(3);
+
+        Response<RandomizerSinglePool<Object>> result = PoolParser.parse(soList);
+        assertTrue(result.wasValueReturned());
+        ReusePool<Object> asPool = (ReusePool<Object>) result.getValue();
+        assertEquals(3, asPool.size());
+
+        RandomizerSinglePool<SimpleObject> pool = ReusePool.create(soList);
+        result = PoolParser.parse((Object) pool);
+        assertTrue(result.wasValueReturned());
+        asPool = (ReusePool<Object>) result.getValue();
+        assertEquals(3, asPool.size());
+
+        result = PoolParser.parse(5);
         assertTrue(result.wasError());
     }
 }

@@ -1,6 +1,7 @@
 package redactedrice.universalrandomizer.parser;
 
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -8,8 +9,10 @@ import redactedrice.modularparser.core.Response;
 import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentLiteral;
 import redactedrice.modularparser.utils.ArgumentUtils;
+import redactedrice.reflectionhelpers.utils.ConversionUtils;
 import redactedrice.universalrandomizer.pool.EliminatePool;
 import redactedrice.universalrandomizer.pool.EliminatePoolSet;
+import redactedrice.universalrandomizer.pool.RandomizerSinglePool;
 import redactedrice.universalrandomizer.pool.ReusePool;
 
 public class PoolParser extends BaseArgumentLiteral {
@@ -53,5 +56,17 @@ public class PoolParser extends BaseArgumentLiteral {
                     EliminatePool.create(removeDupes.getValue(), values.getValue().toList()),
                     depth.getValue()));
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Response<RandomizerSinglePool<Object>> parse(Object pool) {
+        if (pool instanceof RandomizerSinglePool<?> asPool) {
+            return Response.is((RandomizerSinglePool<Object>) asPool);
+        }
+        Collection<Object> asCollection = ConversionUtils.convertToCollection(pool);
+        if (asCollection.size() > 1) {
+            return Response.is(ReusePool.create(asCollection));
+        }
+        return Response.error("Failed to parse Pool object or collection/stream: " + pool);
     }
 }
