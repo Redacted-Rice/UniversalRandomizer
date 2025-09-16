@@ -13,32 +13,31 @@ import redactedrice.universalrandomizer.pool.EliminatePoolSet;
 import redactedrice.universalrandomizer.pool.ReusePool;
 
 public class PoolParser extends BaseArgumentLiteral {
-    protected static final String[] argsOrdered = new String[] {"type", "basedon", "duplicates",
+    protected static final String[] argsOrdered = new String[] {"basedon", "type", "duplicates",
             "depth"};
-    protected static final Object[] argsDefault = new Object[] {"reuse", "times", "allow", 1};
+    protected static final Object[] argsDefault = new Object[] {"reuse", "allow", 1};
+    protected static final Map<Object, Integer> specialValues = Map.of("unlimited", -1);
 
     public PoolParser() {
         this(null);
     }
 
     public PoolParser(Grouper grouper) {
-        super(PoolParser.class.getSimpleName(), "Pool", grouper,
-                new String[] {argsOrdered[0], argsOrdered[1]}, new String[] {argsOrdered[2]},
-                new Object[] {1});
+        super(PoolParser.class.getSimpleName(), "Pool", grouper, new String[] {argsOrdered[0]},
+                new String[] {argsOrdered[1], argsOrdered[2], argsOrdered[3]}, argsDefault);
     }
 
     @Override
     public Response<Object> tryEvaluateObject(Map<String, Object> args) {
-        Response<Boolean> reuse = ArgumentUtils.argDichotomyToBool(argsOrdered[0], args, "reuse",
+        Response<Stream<Object>> values = ArgumentUtils.argToStream(argsOrdered[0], args);
+        Response<Boolean> reuse = ArgumentUtils.argDichotomyToBool(argsOrdered[1], args, "reuse",
                 "eliminate");
-        Response<Stream<Object>> values = ArgumentUtils.argToStream(argsOrdered[1], args);
         Response<Boolean> removeDupes = ArgumentUtils.argDichotomyToBool(argsOrdered[2], args,
                 "remove", "allow");
 
-        // TODO: support no limit (-1)
-        Response<Integer> depth = Response.is((Integer) argsDefault[3]);
+        Response<Integer> depth = Response.is((Integer) argsDefault[2]);
         if (reuse.wasValueReturned() && Boolean.FALSE.equals(reuse.getValue())) {
-            depth = ArgumentUtils.argToType(argsOrdered[3], args, Integer.class);
+            depth = ArgumentUtils.argToType(argsOrdered[3], args, Integer.class, specialValues);
         }
 
         Response<Object> allErrors = Response.combineErrors(reuse, values, removeDupes, depth);

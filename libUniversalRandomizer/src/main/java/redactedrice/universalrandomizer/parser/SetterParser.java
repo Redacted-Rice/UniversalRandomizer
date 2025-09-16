@@ -9,17 +9,17 @@ import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentLiteral;
 import redactedrice.modularparser.utils.ArgumentUtils;
 import redactedrice.reflectionhelpers.utils.ReflectionUtils;
-import redactedrice.universalrandomizer.userobjectapis.Getter;
+import redactedrice.universalrandomizer.userobjectapis.Setter;
 
-public class GetterParser extends BaseArgumentLiteral {
+public class SetterParser extends BaseArgumentLiteral {
     protected static final String[] argsOrdered = new String[] {"field"};
 
-    public GetterParser() {
+    public SetterParser() {
         this(null);
     }
 
-    public GetterParser(Grouper grouper) {
-        super(GetterParser.class.getSimpleName(), "Getter", grouper, new String[] {argsOrdered[0]},
+    public SetterParser(Grouper grouper) {
+        super(SetterParser.class.getSimpleName(), "setter", grouper, new String[] {argsOrdered[0]},
                 new String[] {}, new Object[] {});
     }
 
@@ -32,25 +32,26 @@ public class GetterParser extends BaseArgumentLiteral {
         return parsePath(path.getValue()).convert(Object.class);
     }
 
-    protected static Response<Getter<Object, Object>> parsePath(String path) {
-        Getter<Object, Object> getter = o -> {
+    protected static Response<Setter<Object, Object>> parsePath(String path) {
+        Setter<Object, Object> setter = (o, v) -> {
             try {
-                return ReflectionUtils.getVariable(o, path);
+                Object ret = ReflectionUtils.setVariable(o, path, v);
+                return !Boolean.FALSE.equals(ret);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
                     | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
-                return null;
+                return false;
             }
         };
-        return Response.is(getter);
+        return Response.is(setter);
     }
 
     @SuppressWarnings("unchecked")
-    public static Response<Getter<Object, Object>> parse(Object getter) {
-        if (getter instanceof Getter<?, ?> asGetter) {
-            return Response.is((Getter<Object, Object>) asGetter);
-        } else if (getter instanceof String asString) {
+    public static Response<Setter<Object, Object>> parse(Object setter) {
+        if (setter instanceof Setter<?, ?> asSetter) {
+            return Response.is((Setter<Object, Object>) asSetter);
+        } else if (setter instanceof String asString) {
             return parsePath(asString);
         }
-        return Response.error("Failed to parse Getter object or path string: " + getter);
+        return Response.error("Failed to parse Setter object or path string: " + setter);
     }
 }

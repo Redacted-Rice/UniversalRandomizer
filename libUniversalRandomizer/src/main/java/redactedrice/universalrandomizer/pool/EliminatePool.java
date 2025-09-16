@@ -97,6 +97,10 @@ public class EliminatePool<T> implements RandomizerSinglePool<T> {
         return pool.size();
     }
 
+    public int originalSize() {
+        return pool.size() + removed.size();
+    }
+
     public int instancesOf(T obj) {
         return (int) pool.stream().filter(s -> s == obj).count();
     }

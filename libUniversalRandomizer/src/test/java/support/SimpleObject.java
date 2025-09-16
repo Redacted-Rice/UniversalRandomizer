@@ -57,8 +57,8 @@ public class SimpleObject {
     }
 
     public boolean setIntFieldReturn(int intField) {
-        this.intField = intField;
         if (intField > 0) {
+            this.intField = intField;
             return true;
         }
         return false;

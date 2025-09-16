@@ -71,4 +71,16 @@ public class EliminatePoolSet<T> implements RandomizerSinglePool<T> {
     protected List<EliminatePool<T>> getWorkingPools() {
         return workingPools;
     }
+
+    public int maxDepth() {
+        return maxDepth;
+    }
+
+    public int currentPoolSize() {
+        return workingPools.get(currentPool).size();
+    }
+
+    public int originalPoolSize() {
+        return workingPools.get(0).originalSize();
+    }
 }
