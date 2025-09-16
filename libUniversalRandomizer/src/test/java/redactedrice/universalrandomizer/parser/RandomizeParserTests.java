@@ -23,9 +23,9 @@ import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentChainableLiteral;
 import redactedrice.modularparser.literal.LiteralSupporter;
 import redactedrice.universalrandomizer.pool.ReusePool;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
+import redactedrice.universalrandomizer.testsupport.SimpleObjectUtils;
 import redactedrice.universalrandomizer.userobjectapis.Setter;
-import support.SimpleObject;
-import support.SimpleObjectUtils;
 
 // Tests the Randomizer Reuse class and by extension the Randomizer class since the
 // reuse class is the most simple of the classes

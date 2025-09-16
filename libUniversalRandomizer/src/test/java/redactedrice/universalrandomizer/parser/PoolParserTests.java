@@ -18,11 +18,10 @@ import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentChainableLiteral;
 import redactedrice.modularparser.literal.LiteralSupporter;
 import redactedrice.universalrandomizer.pool.EliminatePoolSet;
-import redactedrice.universalrandomizer.pool.RandomizerPool;
 import redactedrice.universalrandomizer.pool.RandomizerSinglePool;
 import redactedrice.universalrandomizer.pool.ReusePool;
-import support.SimpleObject;
-import support.SimpleObjectUtils;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
+import redactedrice.universalrandomizer.testsupport.SimpleObjectUtils;
 
 class PoolParserTests {
     private ModularParser parser;
@@ -62,7 +61,7 @@ class PoolParserTests {
         assertEquals(KEYWORD, testee.getKeyword());
 
         assertEquals(1, testee.getRequiredArgs().length);
-        assertEquals("basedon", testee.getRequiredArgs()[0]);
+        assertEquals("from", testee.getRequiredArgs()[0]);
 
         assertEquals(3, testee.getOptionalArgs().length);
         assertEquals("type", testee.getOptionalArgs()[0]);
@@ -82,7 +81,7 @@ class PoolParserTests {
     void tryEvaluateObject_reuse() {
         List<SimpleObject> soList = SimpleObjectUtils.soList(3);
         soList.add(soList.get(0)); // add a duplicate
-        Map<String, Object> args = Map.of("basedon", soList.stream(), "type", "reuse", "duplicates",
+        Map<String, Object> args = Map.of("from", soList.stream(), "type", "reuse", "duplicates",
                 "allow");
         Response<Object> result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
@@ -90,14 +89,14 @@ class PoolParserTests {
         assertEquals(4, casted.size());
 
         // Try some other values
-        args = Map.of("basedon", soList.stream(), "type", "reuse", "duplicates", "remove");
+        args = Map.of("from", soList.stream(), "type", "reuse", "duplicates", "remove");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
         casted = (ReusePool<SimpleObject>) result.getValue();
         assertEquals(3, casted.size());
 
         // Bad args
-        args = Map.of("basedon", soList.stream(), "type", "reuse", "duplicates", "bad");
+        args = Map.of("from", soList.stream(), "type", "reuse", "duplicates", "bad");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasError());
     }
@@ -107,7 +106,7 @@ class PoolParserTests {
     void tryEvaluateObject_eliminate() {
         List<SimpleObject> soList = SimpleObjectUtils.soList(3);
         soList.add(soList.get(0)); // add a duplicate
-        Map<String, Object> args = Map.of("basedon", soList.stream(), "type", "eliminate",
+        Map<String, Object> args = Map.of("from", soList.stream(), "type", "eliminate",
                 "duplicates", "allow", "depth", 3);
         Response<Object> result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
@@ -116,8 +115,8 @@ class PoolParserTests {
         assertEquals(3, casted.maxDepth());
 
         // Try some other values
-        args = Map.of("basedon", soList.stream(), "type", "eliminate", "duplicates", "remove",
-                "depth", "unlimited");
+        args = Map.of("from", soList.stream(), "type", "eliminate", "duplicates", "remove", "depth",
+                "unlimited");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
         casted = (EliminatePoolSet<SimpleObject>) result.getValue();
@@ -125,7 +124,7 @@ class PoolParserTests {
         assertEquals(-1, casted.maxDepth());
 
         // Bad args
-        args = Map.of("basedon", soList.stream(), "type", "false", "duplicates", "allow", "depth",
+        args = Map.of("from", soList.stream(), "type", "false", "duplicates", "allow", "depth",
                 "bad");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasError());

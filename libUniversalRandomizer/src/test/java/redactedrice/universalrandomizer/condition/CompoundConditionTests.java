@@ -17,8 +17,8 @@ import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
 import redactedrice.universalrandomizer.userobjectapis.Condition;
-import support.SimpleObject;
 
 class CompoundConditionTests {
     @SuppressWarnings("serial")

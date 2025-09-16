@@ -9,9 +9,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import redactedrice.modularparser.core.Response;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.userobjectapis.MultiGetter;
-import support.SimpleObject;
 
 class WrapperArgumentUtilsTests {
 

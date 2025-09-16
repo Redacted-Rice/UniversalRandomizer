@@ -27,12 +27,12 @@ import redactedrice.universalrandomizer.pool.EliminatePoolSet;
 import redactedrice.universalrandomizer.pool.MultiPool;
 import redactedrice.universalrandomizer.pool.RandomizerPool;
 import redactedrice.universalrandomizer.pool.ReusePool;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
+import redactedrice.universalrandomizer.testsupport.SimpleObjectUtils;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
 import redactedrice.universalrandomizer.userobjectapis.MultiGetter;
 import redactedrice.universalrandomizer.userobjectapis.Setter;
 import redactedrice.universalrandomizer.userobjectapis.SetterNoReturn;
-import support.SimpleObject;
-import support.SimpleObjectUtils;
 
 // Tests the Randomizer Reuse class and by extension the Randomizer class since the
 // reuse class is the most simple of the classes

@@ -1,4 +1,4 @@
-package support;
+package redactedrice.universalrandomizer.testsupport;
 
 
 import redactedrice.universalrandomizer.userobjectapis.Sumable;

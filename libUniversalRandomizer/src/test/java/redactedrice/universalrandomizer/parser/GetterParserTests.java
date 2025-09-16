@@ -18,8 +18,8 @@ import redactedrice.modularparser.core.Response;
 import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentChainableLiteral;
 import redactedrice.modularparser.literal.LiteralSupporter;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
-import support.SimpleObject;
 
 class GetterParserTests {
     private ModularParser parser;

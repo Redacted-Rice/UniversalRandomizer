@@ -20,9 +20,9 @@ import redactedrice.modularparser.core.Response;
 import redactedrice.modularparser.lineformer.Grouper;
 import redactedrice.modularparser.literal.BaseArgumentChainableLiteral;
 import redactedrice.modularparser.literal.LiteralSupporter;
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
+import redactedrice.universalrandomizer.testsupport.SimpleObjectUtils;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
-import support.SimpleObject;
-import support.SimpleObjectUtils;
 
 class SelectParserTest {
     private ModularParser parser;
@@ -32,7 +32,7 @@ class SelectParserTest {
 
     static final String NAME = SelectParser.class.getSimpleName();
     static final String KEYWORD = "select";
-    static final String CHAINED_ARG = "stream";
+    static final String CHAINED_ARG = "from";
 
     @BeforeEach
     void setup() {
@@ -76,13 +76,13 @@ class SelectParserTest {
         List<Integer> expectedInts = soList.stream().map(o -> o.intField).toList();
 
         Getter<SimpleObject, Integer> intGetter = o -> o.intField;
-        Map<String, Object> args = Map.of("stream", soList.stream(), "field", intGetter);
+        Map<String, Object> args = Map.of("from", soList.stream(), "field", intGetter);
         Response<Object> result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
         assertIterableEquals(expectedInts, ((Stream<?>) result.getValue()).toList());
 
         // Test bad args
-        args = Map.of("stream", new SimpleObject("single", 1), "field", intGetter);
+        args = Map.of("from", new SimpleObject("single", 1), "field", intGetter);
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasError());
     }

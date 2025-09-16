@@ -16,7 +16,7 @@ import redactedrice.universalrandomizer.pool.RandomizerSinglePool;
 import redactedrice.universalrandomizer.pool.ReusePool;
 
 public class PoolParser extends BaseArgumentLiteral {
-    protected static final String[] argsOrdered = new String[] {"basedon", "type", "duplicates",
+    protected static final String[] argsOrdered = new String[] {"from", "type", "duplicates",
             "depth"};
     protected static final Object[] argsDefault = new Object[] {"reuse", "allow", 1};
     protected static final Map<Object, Integer> specialValues = Map.of("unlimited", -1);

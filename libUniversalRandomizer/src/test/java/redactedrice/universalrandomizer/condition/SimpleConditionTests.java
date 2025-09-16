@@ -7,10 +7,10 @@ import java.util.Comparator;
 
 import org.junit.jupiter.api.Test;
 
+import redactedrice.universalrandomizer.testsupport.SimpleObject;
+import redactedrice.universalrandomizer.testsupport.UncomparableObject;
 import redactedrice.universalrandomizer.userobjectapis.Condition;
 import redactedrice.universalrandomizer.userobjectapis.Getter;
-import support.SimpleObject;
-import support.UncomparableObject;
 
 class SimpleConditionTests {
     @Test

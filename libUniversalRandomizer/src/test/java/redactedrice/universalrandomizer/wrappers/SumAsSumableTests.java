@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import support.SumableComparableObject;
+import redactedrice.universalrandomizer.testsupport.SumableComparableObject;
 
 class SumAsSumableTests {
     @Test
