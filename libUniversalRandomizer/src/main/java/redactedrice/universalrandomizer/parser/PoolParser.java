@@ -16,9 +16,9 @@ import redactedrice.universalrandomizer.pool.RandomizerSinglePool;
 import redactedrice.universalrandomizer.pool.ReusePool;
 
 public class PoolParser extends BaseArgumentLiteral {
-    protected static final String[] argsOrdered = new String[] {"from", "type", "duplicates",
+    protected static final String[] argsOrdered = new String[] {"from", "onuse", "duplicates",
             "depth"};
-    protected static final Object[] argsDefault = new Object[] {"reuse", "allow", 1};
+    protected static final Object[] argsDefault = new Object[] {"keep", "keep", 1};
     protected static final Map<Object, Integer> specialValues = Map.of("unlimited", -1);
 
     public PoolParser() {
@@ -33,10 +33,10 @@ public class PoolParser extends BaseArgumentLiteral {
     @Override
     public Response<Object> tryEvaluateObject(Map<String, Object> args) {
         Response<Stream<Object>> values = ArgumentUtils.argToStream(argsOrdered[0], args);
-        Response<Boolean> reuse = ArgumentUtils.argDichotomyToBool(argsOrdered[1], args, "reuse",
-                "eliminate");
+        Response<Boolean> reuse = ArgumentUtils.argDichotomyToBool(argsOrdered[1], args, "keep",
+                "remove");
         Response<Boolean> removeDupes = ArgumentUtils.argDichotomyToBool(argsOrdered[2], args,
-                "remove", "allow");
+                "remove", "keep");
 
         Response<Integer> depth = Response.is((Integer) argsDefault[2]);
         if (reuse.wasValueReturned() && Boolean.FALSE.equals(reuse.getValue())) {
