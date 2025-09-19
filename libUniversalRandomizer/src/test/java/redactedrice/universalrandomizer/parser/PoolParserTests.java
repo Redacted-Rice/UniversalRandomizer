@@ -64,13 +64,13 @@ class PoolParserTests {
         assertEquals("from", testee.getRequiredArgs()[0]);
 
         assertEquals(3, testee.getOptionalArgs().length);
-        assertEquals("type", testee.getOptionalArgs()[0]);
+        assertEquals("onuse", testee.getOptionalArgs()[0]);
         assertEquals("duplicates", testee.getOptionalArgs()[1]);
         assertEquals("depth", testee.getOptionalArgs()[2]);
 
         assertEquals(3, testee.getOptionalDefaults().length);
-        assertEquals("reuse", testee.getOptionalDefaults()[0]);
-        assertEquals("allow", testee.getOptionalDefaults()[1]);
+        assertEquals("keep", testee.getOptionalDefaults()[0]);
+        assertEquals("keep", testee.getOptionalDefaults()[1]);
         assertEquals(1, testee.getOptionalDefaults()[2]);
 
         assertEquals(literalSupporter, testee.getLiteralSupporter());
@@ -81,22 +81,22 @@ class PoolParserTests {
     void tryEvaluateObject_reuse() {
         List<SimpleObject> soList = SimpleObjectUtils.soList(3);
         soList.add(soList.get(0)); // add a duplicate
-        Map<String, Object> args = Map.of("from", soList.stream(), "type", "reuse", "duplicates",
-                "allow");
+        Map<String, Object> args = Map.of("from", soList.stream(), "onuse", "keep", "duplicates",
+                "keep");
         Response<Object> result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
         ReusePool<SimpleObject> casted = (ReusePool<SimpleObject>) result.getValue();
         assertEquals(4, casted.size());
 
         // Try some other values
-        args = Map.of("from", soList.stream(), "type", "reuse", "duplicates", "remove");
+        args = Map.of("from", soList.stream(), "onuse", "keep", "duplicates", "remove");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
         casted = (ReusePool<SimpleObject>) result.getValue();
         assertEquals(3, casted.size());
 
         // Bad args
-        args = Map.of("from", soList.stream(), "type", "reuse", "duplicates", "bad");
+        args = Map.of("from", soList.stream(), "onuse", "keep", "duplicates", "bad");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasError());
     }
@@ -106,8 +106,8 @@ class PoolParserTests {
     void tryEvaluateObject_eliminate() {
         List<SimpleObject> soList = SimpleObjectUtils.soList(3);
         soList.add(soList.get(0)); // add a duplicate
-        Map<String, Object> args = Map.of("from", soList.stream(), "type", "eliminate",
-                "duplicates", "allow", "depth", 3);
+        Map<String, Object> args = Map.of("from", soList.stream(), "onuse", "remove",
+                "duplicates", "keep", "depth", 3);
         Response<Object> result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
         EliminatePoolSet<SimpleObject> casted = (EliminatePoolSet<SimpleObject>) result.getValue();
@@ -115,7 +115,7 @@ class PoolParserTests {
         assertEquals(3, casted.maxDepth());
 
         // Try some other values
-        args = Map.of("from", soList.stream(), "type", "eliminate", "duplicates", "remove", "depth",
+        args = Map.of("from", soList.stream(), "onuse", "remove", "duplicates", "remove", "depth",
                 "unlimited");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasValueReturned());
@@ -124,7 +124,7 @@ class PoolParserTests {
         assertEquals(-1, casted.maxDepth());
 
         // Bad args
-        args = Map.of("from", soList.stream(), "type", "false", "duplicates", "allow", "depth",
+        args = Map.of("from", soList.stream(), "onuse", "false", "duplicates", "keep", "depth",
                 "bad");
         result = testee.tryEvaluateObject(args);
         assertTrue(result.wasError());
