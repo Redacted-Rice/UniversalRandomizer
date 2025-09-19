@@ -115,7 +115,7 @@ class BasicParsingTests {
         String script = """
                 // For this case soList is injected before hand representing a list of object
                 // passed to be randomized by the application
-                var intStream = Select(from soList, field intField)
+                var intStream = Select(from soList, field \"intField\")
                 var intPool = Pool(from intStream, onuse "keep", duplicates "keep")
                 var setInt = Setter(field "intField")
                 Randomize(field setInt, of soList, using intPool)
